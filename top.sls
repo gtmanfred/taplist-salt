@@ -1,4 +1,7 @@
 base:
+  'salt*':
+    - iptables.salt
+
   'board*.taplists.beer':
     - iptables
     - repos
