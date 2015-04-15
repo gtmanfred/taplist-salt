@@ -4,7 +4,6 @@ After=syslog.target
 
 [Service]
 ExecStart=/usr/sbin/uwsgi --ini /etc/uwsgi.d/%i.ini
-Restart=always
 KillSignal=SIGQUIT
 Type=notify
 StandardError=syslog
