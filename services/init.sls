@@ -6,9 +6,8 @@ restart nginx:
       - file: taplist config nginx
 
 restart uwsgi:
-  module.run:
-    - name: service.restart
-    - m_name: uwsgi
+  service.dead:
+    - name: uwsgi@taplists.beer
     - listen:
       - file: taplist config uwsgi
 
