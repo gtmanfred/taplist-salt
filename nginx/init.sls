@@ -12,14 +12,19 @@ nginx:
       - file: nginx localhost
       - file: taplist config nginx
 
+  user.present:
+    - name: nginx
+    - groups:
+      - taplist
+
   file.absent:
     - name: /etc/nginx/conf.d/default.conf
 
 nginx user:
   file.replace:
     - name: /etc/nginx/nginx.conf
-    - pattern: user +nginx;
-    - repl: user uwsgi;
+    - pattern: user +uwsgi;
+    - repl: user nginx;
 
 nginx default server:
   file.replace:
