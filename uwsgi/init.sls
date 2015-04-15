@@ -21,7 +21,7 @@ uwsgi:
       - taplist
 
   service.running:
-    - name: uwsgi@taplist.beer.socket
+    - name: uwsgi@taplists.beer.socket
     - enable: True
     - listen:
       - file: taplist config uwsgi
