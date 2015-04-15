@@ -27,3 +27,11 @@ basic user home:
     - user: taplist
     - python: /usr/bin/python2
     - requirements: /home/taplist/taplist/requirements.txt
+
+taplist config file:
+  file.managed:
+    - name: /home/taplist/config.yml
+    - source: salt://app/files/config.yml
+    - user: taplist
+    - group: taplist
+    - mode: 0644
