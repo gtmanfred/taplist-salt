@@ -16,6 +16,7 @@ owners:
             - broadway
             - thebridge
             - huebner
+            - gastropub
         colors:
             even_bg: 'F4FCBB'
             even_fg: '000000'
