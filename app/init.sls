@@ -5,7 +5,9 @@ basic user home:
     - unless: rpm -q gcc
 
   pkg.installed:
-    - name: python-virtualenv
+    - pkgs:
+      - python-virtualenv
+      - libyaml-devel
 
   user.present:
     - names:
