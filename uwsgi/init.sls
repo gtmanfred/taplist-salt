@@ -3,8 +3,10 @@ uwsgi:
     - names: 
       - /etc/tmpfiles.d/taplists.conf:
         - source: salt://uwsgi/files/tmpfiles.conf
-      - /etc/systemd/system/uwsgi.service:
-        - source: salt://uwsgi/files/uwsgi.service
+      - /etc/systemd/system/uwsgi@.service:
+        - source: salt://uwsgi/files/uwsgi@.service
+      - /etc/systemd/system/uwsgi@.socket:
+        - source: salt://uwsgi/files/uwsgi@.socket
 
   pkg.installed:
     - name: uwsgi-plugin-python
@@ -19,7 +21,7 @@ uwsgi:
       - taplist
 
   service.running:
-    - name: uwsgi
+    - name: uwsgi@taplist.beer.socket
     - enable: True
     - listen:
       - file: taplist config uwsgi

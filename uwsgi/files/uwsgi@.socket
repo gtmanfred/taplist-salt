@@ -1,0 +1,10 @@
+[Unit]
+Description=Socket for Taplist WSGI
+
+[Socket]
+ListenStream=/run/uwsgi/taplist/socket
+SocketUser=taplist
+SocketGroup=taplist
+
+[Install]
+WantedBy=multi-user.target
