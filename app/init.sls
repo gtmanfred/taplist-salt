@@ -45,5 +45,5 @@ taplist stormpath config file:
     - group: taplist
     - mode: 0600
     - content: |
-      apiKey.id = {{salt['pillar.get']('stormpath:apikey:id')}}
-      apiKey.secret = {{salt['pillar.get']('stormpath:apikey:secret')}}
+        apiKey.id = {{salt['pillar.get']('stormpath:apikey:id')}}
+        apiKey.secret = {{salt['pillar.get']('stormpath:apikey:secret')}}
