@@ -37,3 +37,13 @@ taplist config file:
     - user: taplist
     - group: taplist
     - mode: 0644
+
+taplist stormpath config file:
+  file.managed:
+    - name: /home/taplist/.apiKey.properties
+    - user: taplist
+    - group: taplist
+    - mode: 0600
+    - content: |
+      apiKey.id = {{salt['pillar.get']('stormpath:apikey:id')}}
+      apiKey.secret = {{salt['pillar.get']('stormpath:apikey:secret')}}
