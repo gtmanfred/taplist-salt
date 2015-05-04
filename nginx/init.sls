@@ -52,7 +52,7 @@ ssl key:
     - user: root
     - group: root
     - mode: '0600'
-    - contents_pilla: nginx:key
+    - contents_pillar: nginx:key
 
 taplist config nginx:
   file.managed:
