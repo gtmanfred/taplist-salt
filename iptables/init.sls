@@ -53,6 +53,19 @@ iptables rules http:
     - connstate: NEW
     - jump: ACCEPT
 
+iptables rules https:
+  iptables.append:
+    - save: True
+    - table: filter
+    - chain: INPUT
+    - match:
+      - state
+      - tcp
+    - proto: tcp
+    - dport: 443
+    - connstate: NEW
+    - jump: ACCEPT
+
 iptables rules redis:
   iptables.append:
     - save: True
