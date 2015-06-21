@@ -82,7 +82,7 @@ iptables rules redis:
       - tcp
     - proto: tcp
     - dport: 6379
-    - source: 10.0.0.0/8
+    - source: {{subnet}}
     - connstate: NEW
     - jump: ACCEPT
 
@@ -96,7 +96,7 @@ iptables rules redis sentinel:
       - tcp
     - proto: tcp
     - dport: 26379
-    - source: 10.0.0.0/8
+    - source: {{subnet}}
     - connstate: NEW
     - jump: ACCEPT
 
