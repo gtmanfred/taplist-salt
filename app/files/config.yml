@@ -11,3 +11,7 @@ owners:
             header_fg: 'ffffff'
             footer_bg: 'BF162C'
             footer_fg: '000000'
+        prices:
+            name: Prices
+            items:
+                - pint
