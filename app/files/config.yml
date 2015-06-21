@@ -3,14 +3,14 @@ owners:
         locations:
             - brewersgrill
         colors:
-            evenbg: 'F4FCBB'
-            evenfg: '000000'
-            oddbg: 'c7ffa0'
-            oddfg: '000000'
-            headerbg: 'BF162C'
+            evenbg: 'C0C0C0'
+            evenfg: '800080'
+            oddbg: '800080'
+            oddfg: 'C0C0C0'
+            headerbg: '800080'
             headerfg: 'ffffff'
-            footerbg: 'BF162C'
-            footerfg: '000000'
+            footerbg: '800080'
+            footerfg: 'ffffff'
         prices:
             name: Prices
             items:
