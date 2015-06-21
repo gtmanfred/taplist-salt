@@ -11,18 +11,3 @@ owners:
             header_fg: 'ffffff'
             footer_bg: 'BF162C'
             footer_fg: '000000'
-    BigHops:
-        locations:
-            - broadway
-            - thebridge
-            - huebner
-            - gastropub
-        colors:
-            even_bg: 'F4FCBB'
-            even_fg: '000000'
-            odd_bg: 'c7ffa0'
-            odd_fg: '000000'
-            header_bg: 'BF162C'
-            header_fg: 'ffffff'
-            footer_bg: 'BF162C'
-            footer_fg: '000000'
