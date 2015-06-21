@@ -1,8 +1,3 @@
-dhparam:
-  cmd.run:
-    - name: openssl dhparam 2048 -out /etc/pki/tls/certs/dhparam.pem
-    - creates: /etc/pki/tls/certs/dhparam.pem
-
 nginx:
   pkg.installed:
     - name: nginx
@@ -42,6 +37,11 @@ nginx localhost:
     - name: /etc/nginx/nginx.conf
     - pattern: "        server_name  localhost;"
     - repl: ""
+
+dhparam:
+  cmd.run:
+    - name: openssl dhparam 2048 -out /etc/pki/tls/certs/dhparam.pem
+    - creates: /etc/pki/tls/certs/dhparam.pem
 
 ssl certificate:
   file.managed:
