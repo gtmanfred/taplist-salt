@@ -1,6 +1,6 @@
 {%- set subnets = salt['network.subnets']() %}
 {%- for s in subnets %}
-{%- if '192.168' in s %}
+{%- if s.startswith('192.168') %}
 {%- set subnet = s %}
 {%- endif %}
 {%- endfor %}
