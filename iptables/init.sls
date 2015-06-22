@@ -1,4 +1,4 @@
-{%- set subnets = salt['network.subnets']() %}
+{%- set subnet = salt['network.subnets'](interfaces='eth2') %}
 disable firewalld:
   service.dead:
     - name: firewalld
@@ -77,11 +77,7 @@ iptables rules redis:
       - tcp
     - proto: tcp
     - dport: 6379
-    {%- for s in subnets %}
-    {%- if s.startswith('192.168') %}
-    - source: {{s}}
-    {%- endif %}
-    {%- endfor %}
+    - source: {{subnet}}
     - connstate: NEW
     - jump: ACCEPT
 
@@ -95,11 +91,7 @@ iptables rules redis sentinel:
       - tcp
     - proto: tcp
     - dport: 26379
-    {%- for s in subnets %}
-    {%- if s.startswith('192.168') %}
-    - source: {{s}}
-    {%- endif %}
-    {%- endfor %}
+    - source: {{subnet}}
     - connstate: NEW
     - jump: ACCEPT
 
