@@ -4,9 +4,9 @@ owners:
             - brewersgrill
         colors:
             evenbg: 'C0C0C0'
-            evenfg: '800080'
+            evenfg: '000000'
             oddbg: '800080'
-            oddfg: 'C0C0C0'
+            oddfg: 'ffffff'
             headerbg: '800080'
             headerfg: 'ffffff'
             footerbg: '800080'
