@@ -3,7 +3,7 @@ owners:
         locations:
             - brewersgrill
         colors:
-            evenbg: 'C0C0C0'
+            evenbg: 'd5d3d5'
             evenfg: '000000'
             oddbg: '800080'
             oddfg: 'ffffff'
