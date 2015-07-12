@@ -5,7 +5,7 @@ owners:
         colors:
             evenbg: 'd5d3d5'
             evenfg: '000000'
-            oddbg: '800080'
+            oddbg: '952caa'
             oddfg: 'ffffff'
             headerbg: '800080'
             headerfg: 'ffffff'
