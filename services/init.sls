@@ -9,5 +9,7 @@ restart uwsgi:
     - name: uwsgi@taplists.beer
     - listen:
       - file: taplist config uwsgi
+      - file: taplist config file
     - onchanges:
       - file: taplist config uwsgi
+      - file: taplist config file
