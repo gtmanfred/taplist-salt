@@ -1,4 +1,7 @@
 base:
+  '*':
+    - sshd
+
   'salt*':
     - iptables.salt
 
