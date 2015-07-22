@@ -1,6 +1,7 @@
 base:
   '*':
     - sshd
+    - monitoring
 
   'salt*':
     - iptables.salt
