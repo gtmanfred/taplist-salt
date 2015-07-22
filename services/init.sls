@@ -6,7 +6,7 @@ restart nginx:
 
 restart sshd:
   service.running:
-    - name: ssdh
+    - name: sshd
     - listen:
       - augeas:sshd_config
 
