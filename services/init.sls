@@ -4,6 +4,12 @@ restart nginx:
     - listen:
       - file: taplist config nginx
 
+restart sshd:
+  service.running:
+    - name: ssdh
+    - listen:
+      - augeas:sshd_config
+
 restart uwsgi:
   service.dead:
     - name: uwsgi@taplists.beer
