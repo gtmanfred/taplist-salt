@@ -5,11 +5,11 @@ owners:
         colors:
             evenbg: 'd5d3d5'
             evenfg: '000000'
-            oddbg: '952caa'
+            oddbg: 'a77380'
             oddfg: 'ffffff'
-            headerbg: '800080'
+            headerbg: '6b303f'
             headerfg: 'ffffff'
-            footerbg: '800080'
+            footerbg: '6b303f'
             footerfg: 'ffffff'
         prices:
             name: Prices
