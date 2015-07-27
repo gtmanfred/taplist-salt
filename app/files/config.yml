@@ -6,7 +6,7 @@ owners:
             evenbg: 'd5d3d5'
             evenfg: '000000'
             oddbg: 'a77380'
-            oddfg: 'ffffff'
+            oddfg: '000000'
             headerbg: '6b303f'
             headerfg: 'ffffff'
             footerbg: '6b303f'
