@@ -9,6 +9,10 @@ basic user home:
       - python-virtualenv
       - libyaml-devel
 
+  group.present:
+    - names:
+      - taplist
+
   user.present:
     - names:
       - taplist
