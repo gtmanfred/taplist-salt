@@ -1,4 +1,4 @@
-{%- set subnet = salt['network.subnets'](interfaces='eth2') %}
+{%- set subnet = salt['network.subnets'](interfaces='eth2')[0] %}
 disable firewalld:
   service.dead:
     - name: firewalld
