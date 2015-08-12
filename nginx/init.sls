@@ -16,8 +16,6 @@ nginx:
     - name: nginx
     - groups:
       - taplist
-    - require:
-      - user: taplist
 
   file.absent:
     - name: /etc/nginx/conf.d/default.conf
