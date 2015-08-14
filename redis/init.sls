@@ -9,30 +9,34 @@ redis30u:
     - pattern: '^bind .*'
     - repl: {{"bind %s 127.0.0.1"|format(serviceip)}}
 
-  service.running:
+  service.enabled:
     - name: redis
-    - enable: True
-    - listen:
-      - file: redis30u
-{%- if salt['grains.get']('fqdn') != 'board1.taplists.beer' %}
-      - file: redis slaveof
-
-redis slaveof:
-  file.append:
-    - name: /etc/redis.conf
-    - text: {{ 'slaveof %s 6379'|format(masterip) }}
-{% endif %}
 
 redis-sentinel:
   file.replace:
     - name: /etc/redis-sentinel.conf
-    - pattern: "sentinel monitor mymaster 127.0.0.1 6379 2"
-    - repl: {{"sentinel monitor mymaster %s 6379 2"|format(masterip)}}
+    - pattern: "sentinel monitor mymaster 127.0.0.1 6379"
+    - repl: {{"sentinel monitor mymaster %s 6379"|format(serviceip)}}
 
-  service.running:
+  service.enabled:
     - name: redis-sentinel
-    - enable: True
-    - listen:
-      - file: redis-sentinel
 
-#    - repl: {{"sentinel monitor mymaster %s 6379 2"|format(salt['mine.get']('*', 'network.ip_addrs')['board1.taplists.beer'][0])}}
+{%- for name, ip in salt['mine.get']('*', 'network.ip_addrs').iteritems() %}
+{% if salt['grains.get']('fqdn') != name %}
+#redis-slave-{{name}}:
+#  file.append:
+#    - name: /etc/redis-sentinel.conf
+#    - text: sentinel known-slave mymaster {{ip[0]}} 6379
+#    - unless: grep -q 'known-slave mymaster {{ip[0]}}' /etc/redis-sentinel.conf
+#    - listen_in:
+#      - service: restart redis-sentinel
+
+redis-sentinel-{{name}}:
+  file.append:
+    - name: /etc/redis-sentinel.conf
+    - text: sentinel known-sentinel mymaster {{ip[0]}} 26379
+    - unless: grep -q 'known-sentinel mymaster {{ip[0]}}' /etc/redis-sentinel.conf
+#    - listen_in:
+#      - service: restart redis-sentinel
+{%- endif %}
+{%- endfor %}

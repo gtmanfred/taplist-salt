@@ -1,3 +1,15 @@
+restart redis:
+  service.running:
+    - name: redis
+    - listen:
+      - file: redis30u
+
+restart redis-sentinel:
+  service.running:
+    - name: redis-sentinel
+    - listen:
+      - file: redis-sentinel
+
 restart nginx:
   service.running:
     - name: nginx
