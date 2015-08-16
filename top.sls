@@ -14,3 +14,4 @@ base:
     - nginx
     - uwsgi
     - services
+    - lb

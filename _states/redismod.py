@@ -29,6 +29,8 @@ overridden in states using the following arguments: ``host``, ``post``, ``db``,
         - password: somuchkittycat
 '''
 import copy
+import logging
+log = logging.getLogger(__name__)
 
 __virtualname__ = 'redis'
 
@@ -167,5 +169,99 @@ def slaveof(name, sentinel_host=None, sentinel_port=None, sentinel_password=None
         'new': current_master,
     }
     ret['comment'] = 'Minion successfully connected to master: {0}'.format(name)
+
+    return ret
+
+
+def reset_sentinel(name, slave=None, sentinel=None, sentinel_host=None, sentinel_port=None, sentinel_password=None):
+    '''
+    Set this redis instance as a slave.
+    
+    name
+        Master to reset
+
+    slave
+        slave to remove from master
+
+    sentinel
+        sentinel to remove from master
+
+    sentinel_host
+        Ip of the sentinel
+
+    sentinel_port
+        Port of the sentinel
+
+    sentinel_password
+        Password of the sentinel
+    '''
+    ret = {'name': name,
+           'changes': {},
+           'result': False,
+           'comment': 'Failed to reset master: {0}'.format(name)}
+
+    if slave is None and sentinel is None:
+        ret['comment'] = 'Slave or Sentinel must be set for tracking of what is reset'
+        return ret
+
+    kwargs = {
+        'master': name,
+        'host': sentinel_host,
+        'port': sentinel_port,
+        'password': sentinel_password,
+    }
+
+    if slave is not None:
+        slaves = __salt__['redis.get_slaves'](**kwargs)
+    else:
+        slaves = []
+
+    if sentinel is not None:
+        sentinels = __salt__['redis.get_sentinels'](**kwargs)
+    else:
+        sentinels = []
+
+    remove_slave = slave in [x['name'] for x in slaves]
+    remove_sentinel = sentinel in [x['name'] for x in slaves]
+
+    if remove_slave is False and remove_sentinel is False:
+        ret['comment'] = 'Slave or Sentinel is not included: {0}'.format(name)
+        ret['result'] = True
+        return ret
+
+    elif __opts__['test'] is True:
+        ret['result'] = None
+        ret['changes'] = {
+            'remove_slave': remove_slave,
+            'remove_sentinel': remove_sentinel,
+        }
+
+    if remove_slave is True:
+        log.debug('removeing_slave')
+        new_slaves = __salt__['redis.reset_sentinel'](**kwargs)
+        changes = filter(lambda x: not any(y['name'] == x['name'] for y in new_slaves), slaves)
+        log.debug(slaves)
+        log.debug(new_slaves)
+        if not changes:
+            ret['result'] = False
+            ret['comment'] = 'Failed to remove slave'
+            return ret
+        ret['changes']['slaves_removed'] = changes
+        ret['comment'] = 'Successfully reset {0}'.format(name)
+        ret['result'] = True
+
+    if remove_sentinel is True:
+        log.debug('removeing_sentinel')
+        if ret['result'] is False:
+             __salt__['redis.reset_sentinel'](**kwargs)
+        new_sentinels = __salt__['redis.get_sentinels'](name)
+        changes = filter(lambda x: not any(y['name'] == x['name'] for y in new_sentinels), sentinels)
+        if not changes:
+            ret['result'] = False
+            ret['comment'] = 'Failed to remove sentinel'
+            return ret
+        ret['changes']['sentinels_removed'] = changes
+        ret['comment'] = 'Successfully reset {0}'.format(name)
+        ret['result'] = True
 
     return ret
