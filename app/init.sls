@@ -2,6 +2,8 @@ basic user home:
   module.run:
     - name: pkg.group_install
     - m_name: Development Tools
+    - skip:
+      - git
     - unless: rpm -q gcc
 
   pkg.installed:

@@ -15,8 +15,10 @@ Module to provide redis functionality to Salt
     redis.password: None
 '''
 
-# Import Pytho libs
+# Import Python libs
 from __future__ import absolute_import
+from time import sleep
+from salt.ext.six.moves import zip
 
 # Import third party libs
 try:
@@ -24,9 +26,6 @@ try:
     HAS_REDIS = True
 except ImportError:
     HAS_REDIS = False
-
-import logging
-log = logging.getLogger(__name__)
 
 __virtualname__ = 'redis'
 
@@ -55,6 +54,7 @@ def _connect(host=None, port=None, db=None, password=None):
         password = __salt__['config.option']('redis.password')
 
     return redis.StrictRedis(host, port, db, password)
+
 
 def _sconnect(host=None, port=None, password=None):
     '''
@@ -510,6 +510,8 @@ def sentinel_get_master_ip(master, host=None, port=None, password=None):
     '''
     Get ip for sentinel master
 
+    .. versionadded: Boron
+
     CLI Example:
 
     .. code-block:: bash
@@ -518,12 +520,14 @@ def sentinel_get_master_ip(master, host=None, port=None, password=None):
     '''
     server = _sconnect(host, port, password)
     ret = server.sentinel_get_master_addr_by_name(master)
-    return dict(zip(('master_host', 'master_port'), ret))
+    return dict(list(zip(('master_host', 'master_port'), ret)))
 
 
 def get_master_ip(host=None, port=None, password=None):
     '''
     Get host information about slave
+
+    .. versionadded: Boron
 
     CLI Example:
 
@@ -534,4 +538,82 @@ def get_master_ip(host=None, port=None, password=None):
     server = _connect(host, port, password)
     info = server.info()
     ret = (info.get('master_host', ''), info.get('master_port', ''))
-    return dict(zip(('master_host', 'master_port'), ret))
+    return dict(list(zip(('master_host', 'master_port'), ret)))
+
+
+def get_masters(master, host=None, port=None, password=None):
+    '''
+    Get masters in cluster
+
+    .. versionadded: Boron
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' redis.get_masters mymaster
+    '''
+    conn = _sconnect(host, port, password)
+    return conn.sentinel_masters(master)
+
+
+def get_slaves(master, host=None, port=None, password=None):
+    '''
+    Get slaves in cluster
+
+    .. versionadded: Boron
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' redis.get_slaves mymaster
+    '''
+    conn = _sconnect(host, port, password)
+    return conn.sentinel_slaves(master)
+
+
+def get_sentinels(master, host=None, port=None, password=None):
+    '''
+    Get sentinels in cluster
+
+    .. versionadded: Boron
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' redis.get_sentinels mymaster
+    '''
+    conn = _sconnect(host, port, password)
+    return conn.sentinel_sentinels(master)
+
+
+def reset_sentinel(master, host=None, port=None, password=None):
+    '''
+    Reset Sentinel and wait for it to come back up to clear slaves
+
+    .. versionadded: Boron
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' redis.reset_sentinel mymaster
+    '''
+    if host is None:
+        host = __salt__['config.option']('redis_sentinel.host', 'localhost')
+    if port is None:
+        port = __salt__['config.option']('redis_sentinel.port', 26379)
+    if password is None:
+        password = __salt__['config.option']('redis_sentinel.password')
+    conn = redis.Connection(host=host, port=port, password=password)
+    conn.connect()
+    rconn = _sconnect()
+
+    conn.send_command('sentinel reset {0}'.format(master))
+
+    while len(rconn.sentinel_slaves(master)) == 0:
+        sleep(1)
+
+    return rconn.sentinel_slaves(master)
