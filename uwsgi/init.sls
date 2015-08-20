@@ -10,6 +10,7 @@ uwsgi:
 
   pkg.installed:
     - name: uwsgi-plugin-python
+    - refresh: True
 
   cmd.run:
     - name: /usr/bin/systemd-tmpfiles --create /etc/tmpfiles.d/taplists.conf
