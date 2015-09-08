@@ -7,9 +7,9 @@ ius:
     - failovermethod: priority
     - names:
         - ius:
-          - mirrorlist: "http://dmirr.iuscommunity.org/mirrorlist/?repo=ius-centos7&arch=$basearch"
+          - mirrorlist: "https://mirrors.iuscommunity.org/mirrorlist?repo=ius-centos7&arch=$basearch&protocol=http"
         - ius-testing:
-          - mirrorlist: "http://dmirr.iuscommunity.org/mirrorlist/?repo=ius-centos7-testing&arch=$basearch"
+          - mirrorlist: "https://mirrors.iuscommunity.org/mirrorlist?repo=ius-centos7-testing&arch=$basearch&protocol=http"
 
 epel:
   pkgrepo.managed:
