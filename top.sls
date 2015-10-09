@@ -1,7 +1,7 @@
 base:
   '*':
     - sshd
-    - monitoring
+    - psutil
 
   'salt*':
     - iptables.salt
@@ -13,5 +13,6 @@ base:
     - app
     - nginx
     - uwsgi
-    - services
+    - benchmark
     - lb
+    - services

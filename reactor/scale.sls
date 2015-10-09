@@ -1,10 +1,13 @@
-{%- if ['interface'] in data['data'] %}
-scale up:
-  runner.taplist.create:
-    - name: 'board[0-9]+\.taplists\.beer'
-    - num: 1
+{%- if 'interface' in data['data'] %}
+add to scaleup:
+  runner.queue.insert:
+    - queue: scaleup
+    - items:
+        - {{data['data']['id']}}
 {%- else %}
-scale down:
-  runner.taplist.delete:
-    - num: 3
+add to scaledown:
+  runner.queue.insert:
+    - queue: scaledown
+    - items:
+        - {{data['data']['id']}}
 {%- endif %}

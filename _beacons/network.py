@@ -8,8 +8,14 @@ Beacon to monitor statistics from ethernet adapters
 # Import Python libs
 from __future__ import absolute_import
 import logging
+import os.path
+import json
 import time
 import psutil
+import pprint
+import requests
+from salt.cloud import CloudClient
+from salt.client import Caller
 
 log = logging.getLogger(__name__)
 
@@ -18,6 +24,30 @@ __virtualname__ = 'network'
 __attrs = ['bytes_sent', 'bytes_recv', 'packets_sent',
            'packets_recv', 'errin', 'errout',
            'dropin', 'dropout']
+
+def count_board():
+    config = __salt__['pillar.get']('cloud')
+    api_key = config['providers']['my-nova']['api_key']
+    ident = config['providers']['my-nova']['identity_url']
+    tenant = config['providers']['my-nova']['tenant']
+    user = config['providers']['my-nova']['user']
+    region = config['providers']['my-nova']['compute_region']
+    sendpoint = 'https://{0}.servers.api.rackspacecloud.com/v2/{1}'.format(region, tenant)
+    headers = {
+      'Content-Type': 'application/json'
+    }
+    payload={
+      "auth": {
+        "RAX-KSKEY:apiKeyCredentials": {
+          "username": user,
+          "apiKey": api_key
+        }
+      }
+    }
+    ret = requests.post(os.path.join(ident, 'tokens'), data=json.dumps(payload), headers=headers).json()
+    headers['X-Auth-Token'] = ret['access']['token']['id']
+    servers = requests.get('{0}/servers/detail?name={1}'.format(sendpoint, 'board'), headers=headers).json().get('servers', [])
+    return len(servers)
 
 
 def _to_list(obj):
@@ -127,5 +157,10 @@ def beacon(config):
                         _diff = True
             if _diff:
                 ret.append({'interface': interface,
-                            'network_info': _to_list(_if_stats)})
+                            'network_info': _to_list(_if_stats),
+                            'scale': 'up'})
+            else:
+                if count_board() <= 3:
+                    return []
+                ret.append({'scale': 'down'})
     return ret

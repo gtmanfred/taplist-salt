@@ -22,7 +22,3 @@ epel:
             - baseurl: http://mirror.rackspace.com/epel/7/$basearch
         - epel-testing:
             - baseurl: http://mirror.rackspace.com/epel/testing/7/$basearch
-
-clean repos:
-  cmd.run:
-    - name: yum clean all

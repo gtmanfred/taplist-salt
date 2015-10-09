@@ -1,5 +1,5 @@
 {% set serviceip = salt['grains.get']('ip4_interfaces:eth2:0', '') %}
-{% set masterip = salt['mine.get']('*', 'network.ip_addrs')['board1.taplists.beer'][0] %}
+{% set masterip = salt['mine.get']('board1*', 'network.ip_addrs')['board1.taplists.beer'][0] %}
 redis30u:
   pkg.installed:
     - pkgs:

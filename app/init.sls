@@ -1,11 +1,10 @@
-basic user home:
-  module.run:
-    - name: pkg.group_install
-    - m_name: Development Tools
+dev tools:
+  pkg.group_installed:
+    - name: Development Tools
     - skip:
       - git
-    - unless: rpm -q gcc
 
+basic user home:
   pkg.installed:
     - pkgs:
       - python-virtualenv
@@ -24,6 +23,7 @@ basic user home:
   git.latest:
     - name: git://github.com/bighops/taplist.git
     - target: /home/taplist/taplist
+    - rev: master
     - user: taplist
 
   virtualenv.managed:
